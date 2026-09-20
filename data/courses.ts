@@ -18,7 +18,7 @@ export const courses: Course[] = [
     "level": 1,
     "levelName": "Beginner",
     "duration": "4 months",
-    "fee": "₹20,000",
+    "fee": "₹50,000",,
     "lede": "Go from spreadsheets to storytelling with data. Learn to clean data, query databases, build dashboards and explain what the numbers mean to a business.",
     "overview": "This program is built for people who want to work with data but are starting from the basics. You learn the tools analysts use every day (Excel, SQL, Power BI and Python) and practise them on realistic business datasets. By the end you can take a vague business question, find the answer in the data and present it clearly.",
     "who": [
@@ -142,7 +142,7 @@ export const courses: Course[] = [
     "level": 2,
     "levelName": "Intermediate",
     "duration": "6 months",
-    "fee": "₹20,000",
+    "fee": "₹50,000",,
     "lede": "Build strong foundations in Python, statistics and machine learning, then apply them to real data science problems.",
     "overview": "This program takes you from data wrangling to building and evaluating machine learning models. You learn the statistics behind the methods, so you understand why a model works, and you finish by packaging a project you can show to employers.",
     "who": [
@@ -266,7 +266,7 @@ export const courses: Course[] = [
     "level": 2,
     "levelName": "Intermediate",
     "duration": "6 months",
-    "fee": "₹20,000",
+    "fee": "₹50,000",,
     "lede": "Learn Python, SQL, databases, ETL, cloud platforms and the modern workflows that move data from source to insight.",
     "overview": "Data engineers build the systems that make data reliable and available. This program covers databases, ETL pipelines, distributed processing with PySpark, orchestration with Airflow and cloud basics, and it ends with a pipeline you build from scratch.",
     "who": [
@@ -392,7 +392,7 @@ export const courses: Course[] = [
     "level": 1,
     "levelName": "Beginner",
     "duration": "90 days",
-    "fee": "₹20,000",
+    "fee": "₹50,000",,
     "lede": "Build production-ready web applications with modern frontend, backend and database technologies.",
     "overview": "You start with how the web works and finish by deploying a complete application. Along the way you learn HTML, CSS, JavaScript, React, Node.js and databases, and you practise the Git workflow that development teams use every day.",
     "who": [
@@ -518,7 +518,7 @@ export const courses: Course[] = [
     "level": 3,
     "levelName": "Advanced",
     "duration": "5 months",
-    "fee": "₹20,000",
+    "fee": "₹50,000",,
     "lede": "Learn machine learning, deep learning and practical AI development, from model training to deployment.",
     "overview": "This advanced program is for learners who already program in Python and know the basics of machine learning. You go deeper into neural networks and language models, then learn how to ship models as usable services.",
     "who": [
@@ -640,7 +640,7 @@ export const courses: Course[] = [
     "level": 2,
     "levelName": "Intermediate",
     "duration": "3 months",
-    "fee": "₹20,000",
+    "fee": "₹50,000",,
     "lede": "Master cloud infrastructure, deployment, CI/CD, containers and DevOps practices.",
     "overview": "This program shows how software gets built, tested, deployed and monitored. You work on Linux, containers and cloud services, then automate the whole flow with CI/CD and infrastructure as code.",
     "who": [
