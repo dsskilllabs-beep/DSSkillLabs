@@ -9,10 +9,13 @@
  *    Click Deploy, allow the permissions, and copy the Web app URL (ends with /exec).
  * 3. Put that URL in your website's ENQUIRY_WEBHOOK_URL setting (see README).
  * 4. Editing this code later? Deploy > Manage deployments > edit > New version, or the change won't go live.
+ *
+ * To test the sheet connection from this editor: choose testWrite in the function dropdown at the top, click Run,
+ * then check the sheet for a "Test" row. The Execution log at the bottom shows {"ok":true} or the error.
  */
 
 const SHEET_ID = '1k7H2ailPA-J4xWYFKZrUgdJwlGGk6kwyrHrky1z2oto';
-const TAB_GID = 1802604087;
+const TAB_GID = 1802604087; // the number after gid= in the sheet's address
 
 // Optional: set any long random text here AND the same value as ENQUIRY_WEBHOOK_TOKEN on the website.
 // Requests without it are rejected, so strangers who find the URL can't add rows.
@@ -32,8 +35,8 @@ function doPost(e) {
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try {
-  const tabs = SpreadsheetApp.openById(SHEET_ID).getSheets();
-const sheet = tabs.find(function (t) { return t.getSheetId() === TAB_GID; }) || tabs[0];
+      const tabs = SpreadsheetApp.openById(SHEET_ID).getSheets();
+      const sheet = tabs.find(function (t) { return t.getSheetId() === TAB_GID; }) || tabs[0];
       if (sheet.getLastRow() === 0) {
         sheet.appendRow(HEADERS);
         sheet.setFrozenRows(1);
@@ -67,4 +70,17 @@ function clean(v) {
 
 function reply(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// Run this from the editor to check that the script can write to your sheet.
+function testWrite() {
+  const out = doPost({
+    postData: {
+      contents: JSON.stringify({
+        type: 'enquiry', name: 'Test', email: 'test@example.com',
+        phone: '0000000000', course: 'Test', message: 'Test row from the editor',
+      }),
+    },
+  });
+  Logger.log(out.getContent());
 }
