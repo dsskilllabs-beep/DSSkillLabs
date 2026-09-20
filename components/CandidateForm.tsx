@@ -6,7 +6,7 @@ import Icon from './Icon';
 import { candidateSections, allFields, type Field } from '@/data/candidateForm';
 import { validate, type Values } from '@/lib/candidate';
 
-type State = { kind: 'idle' | 'sending' | 'ok' | 'error'; message?: string };
+type State = { kind: 'idle' | 'sending' | 'ok' | 'error'; message?: string; detail?: string };
 
 const labelCls = 'mb-[7px] block text-[14.5px] font-semibold text-[#CBD8F5]';
 
@@ -106,11 +106,13 @@ export default function CandidateForm() {
   const [source, setSource] = useState('');
   const [trap, setTrap] = useState('');
   const [state, setState] = useState<State>({ kind: 'idle' });
+  const [debug, setDebug] = useState(false);
 
   // A QR code or link can carry the college name: /candidate-registration?src=ABC%20College
   useEffect(() => {
     const s = new URLSearchParams(window.location.search).get('src');
     if (s) setSource(s.trim().slice(0, 120));
+    setDebug(new URLSearchParams(window.location.search).has('debug'));
   }, []);
 
   const set = (key: string, v: string | string[]) => {
@@ -147,7 +149,8 @@ export default function CandidateForm() {
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
         if (json.errors) setErrors(json.errors);
-        throw new Error(json.error || 'Something went wrong. Please try again.');
+        setState({ kind: 'error', message: json.error || 'Something went wrong. Please try again.', detail: json.detail });
+        return;
       }
       setState({ kind: 'ok' });
       window.scrollTo({ top: 0 });
@@ -212,6 +215,11 @@ export default function CandidateForm() {
         <Button type="submit" className="w-full sm:w-auto sm:min-w-[260px]">{state.kind === 'sending' ? 'Submitting…' : 'Submit registration'}</Button>
         <div role="status" aria-live="polite" className={`mt-4 min-h-6 text-[15px] font-semibold ${state.kind === 'error' ? 'text-[#FFB4A2]' : 'text-brand-cyan'}`}>
           {state.kind === 'error' && state.message}
+          {debug && state.kind === 'error' && state.detail && (
+            <span className="mt-2 block break-words rounded-lg border border-line-strong bg-navy-800 p-3 text-[13.5px] font-medium text-ink-muted">
+              Debug: {state.detail}
+            </span>
+          )}
         </div>
         <p className="mt-2 max-w-[70ch] text-[13.5px] text-ink-muted">
           Your details are used only by DS SkillLabs to contact you about training. Fields marked * are required.
