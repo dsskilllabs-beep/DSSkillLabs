@@ -11,7 +11,8 @@
  * 4. Editing this code later? Deploy > Manage deployments > edit > New version, or the change won't go live.
  */
 
-const SHEET_ID = '1h8QBf22ndrkPtk5JtCK0bNagnzzASuQQZVGZ5qnvhPs';
+const SHEET_ID = '1k7H2ailPA-J4xWYFKZrUgdJwlGGk6kwyrHrky1z2oto';
+const TAB_GID = 1802604087;
 
 // Optional: set any long random text here AND the same value as ENQUIRY_WEBHOOK_TOKEN on the website.
 // Requests without it are rejected, so strangers who find the URL can't add rows.
