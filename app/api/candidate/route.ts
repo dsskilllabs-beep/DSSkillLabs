@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { normalize, validate, toAnswers } from '@/lib/candidate';
+import { postToWebhook, explainFailure } from '@/lib/webhook';
 
 // Receives the candidate registration form, checks it again on the server, and forwards it to the Google Apps Script
 // web app in ENQUIRY_WEBHOOK_URL. The script saves it as one row in the "Candidate Registrations" tab.
@@ -29,28 +30,13 @@ export async function POST(req: Request) {
 
   let detail: string;
   try {
-    const res = await fetch(webhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'candidate',
-        token: process.env.ENQUIRY_WEBHOOK_TOKEN ?? '',
-        answers: toAnswers(values, source),
-      }),
+    const result = await postToWebhook(webhook, {
+      type: 'candidate',
+      token: process.env.ENQUIRY_WEBHOOK_TOKEN ?? '',
+      answers: toAnswers(values, source),
     });
-    const text = await res.text();
-    let result: { ok?: boolean; error?: string } | null = null;
-    try {
-      result = JSON.parse(text);
-    } catch {
-      result = null;
-    }
-    if (res.ok && result?.ok) return NextResponse.json({ ok: true });
-
-    // Short, secret-free reason. It is shown on the form only when the page address has ?debug=1.
-    detail = result
-      ? `The Google script answered: "${result.error ?? 'no message'}" (HTTP ${res.status}). Old script code, or the wrong sheet or tab.`
-      : `Google did not return JSON (HTTP ${res.status}). The web app is probably not set to "Anyone", or ENQUIRY_WEBHOOK_URL is not the /exec link. Response began: ${text.replace(/\s+/g, ' ').slice(0, 80)}`;
+    if (result.ok && result.json?.ok) return NextResponse.json({ ok: true });
+    detail = explainFailure(webhook, result);
   } catch (err) {
     detail = `Could not reach Google: ${err instanceof Error ? err.message : 'unknown error'}`;
   }
