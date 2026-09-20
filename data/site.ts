@@ -16,5 +16,6 @@ export const site = {
     { label: 'Projects', href: '/projects' },
     { label: 'Placements', href: '/placements' },
     { label: 'Contact', href: '/contact' },
+    { label: 'Candidate Form', href: '/candidate-registration' },
   ],
 } as const;
