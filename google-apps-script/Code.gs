@@ -32,7 +32,8 @@ function doPost(e) {
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try {
-      const sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+  const tabs = SpreadsheetApp.openById(SHEET_ID).getSheets();
+const sheet = tabs.find(function (t) { return t.getSheetId() === TAB_GID; }) || tabs[0];
       if (sheet.getLastRow() === 0) {
         sheet.appendRow(HEADERS);
         sheet.setFrozenRows(1);
