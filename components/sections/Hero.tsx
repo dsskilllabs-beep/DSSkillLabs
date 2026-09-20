@@ -13,6 +13,7 @@ export default function Hero() {
             Master Data, AI, Engineering and Full Stack Development through practical, project-based learning.
           </p>
           <div className="mt-[34px] flex flex-col gap-3.5 sm:flex-row">
+            <Button href="/candidate-registration" variant="ghost">Candidate registration</Button>
             <Button href="/courses">Explore courses</Button>
             <Button href="/contact" variant="ghost">Talk to an expert</Button>
           </div>
