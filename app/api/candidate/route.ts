@@ -27,6 +27,7 @@ export async function POST(req: Request) {
 
   const source = typeof body.source === 'string' ? body.source.trim().slice(0, 120) : '';
 
+  let detail: string;
   try {
     const res = await fetch(webhook, {
       method: 'POST',
@@ -37,10 +38,22 @@ export async function POST(req: Request) {
         answers: toAnswers(values, source),
       }),
     });
-    const result = await res.json().catch(() => null);
-    if (!res.ok || !result?.ok) throw new Error(`Webhook failed: ${res.status} ${result?.error ?? ''}`);
-    return NextResponse.json({ ok: true });
-  } catch {
-    return NextResponse.json({ error: 'We could not send your details. Please try again.' }, { status: 502 });
+    const text = await res.text();
+    let result: { ok?: boolean; error?: string } | null = null;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      result = null;
+    }
+    if (res.ok && result?.ok) return NextResponse.json({ ok: true });
+
+    // Short, secret-free reason. It is shown on the form only when the page address has ?debug=1.
+    detail = result
+      ? `The Google script answered: "${result.error ?? 'no message'}" (HTTP ${res.status}). Old script code, or the wrong sheet or tab.`
+      : `Google did not return JSON (HTTP ${res.status}). The web app is probably not set to "Anyone", or ENQUIRY_WEBHOOK_URL is not the /exec link. Response began: ${text.replace(/\s+/g, ' ').slice(0, 80)}`;
+  } catch (err) {
+    detail = `Could not reach Google: ${err instanceof Error ? err.message : 'unknown error'}`;
   }
+  console.error('[candidate] webhook failed:', detail);
+  return NextResponse.json({ error: 'We could not send your details. Please try again.', detail }, { status: 502 });
 }
